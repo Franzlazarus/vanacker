@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Research — Van Acker Art Gallery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #111;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      width: min(980px, 100%);
+      padding: 72px 64px 96px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: clamp(2.6rem, 7vw, 4.6rem);
+      letter-spacing: -0.01em;
+    }
+
+    .intro {
+      margin: 0 auto 48px;
+      max-width: 52ch;
+      font-size: clamp(1rem, 2.6vw, 1.4rem);
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .project-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px 32px;
+      margin: 0 0 64px;
+    }
+
+    .project-link {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: #111;
+      text-decoration: none;
+      border-bottom: 2px solid #111;
+      padding-bottom: 6px;
+    }
+
+    .project-link:focus-visible {
+      outline: 2px solid #111;
+      outline-offset: 6px;
+    }
+
+    .gallery-section {
+      scroll-margin-top: 40px;
+    }
+
+    .project-title {
+      margin: 0 0 28px;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      letter-spacing: -0.01em;
+    }
+
+    .carousel {
+      position: relative;
+      display: inline-block;
+    }
+
+    .viewport {
+      width: min(720px, 82vw);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .track {
+      display: flex;
+      width: calc(100% * var(--slide-count, 3));
+      height: 100%;
+      transform: translateX(calc(-100% / var(--slide-count, 3)));
+    }
+
+    .slide {
+      height: 100%;
+      flex: 0 0 calc(100% / var(--slide-count, 3));
+      object-fit: contain;
+      display: block;
+      background: #fff;
+    }
+
+    .counter {
+      margin-top: 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .scrubber {
+      width: min(460px, 70vw);
+      margin: 16px auto 0;
+      accent-color: #111;
+    }
+
+    .scrubber input[type="range"] {
+      width: 100%;
+    }
+
+    .loading {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 72px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #111;
+      padding-bottom: 4px;
+    }
+
+    .back-link:focus-visible {
+      outline: 2px solid #111;
+      outline-offset: 6px;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 48px 24px 72px;
+      }
+
+      .scrubber {
+        width: min(360px, 78vw);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Open Research</h1>
+    <p class="intro">
+      This is research for out art, it is a backdrop. A view into our minds.
+    </p>
+
+    <div class="project-list">
+      <a class="project-link" href="#dugin-superhero">Dugin: Superhero</a>
+    </div>
+
+    <section id="dugin-superhero" class="gallery-section">
+      <h2 class="project-title">Dugin: Superhero</h2>
+      <div class="carousel" aria-live="polite">
+        <div class="viewport">
+          <div class="track">
+            <img class="slide" alt="Dugin: Superhero image" />
+            <img class="slide" alt="Dugin: Superhero image" />
+            <img class="slide" alt="Dugin: Superhero image" />
+          </div>
+        </div>
+      </div>
+      <div class="counter" data-counter>Loading...</div>
+      <div class="scrubber">
+        <input type="range" min="1" max="1" value="1" step="1" aria-label="Scrub images" data-scrubber />
+      </div>
+    </section>
+
+    <a class="back-link" href="index.html">Back to home</a>
+  </main>
+  <script>
+    const carousel = document.querySelector(".carousel");
+    const track = carousel.querySelector(".track");
+    const slides = Array.from(carousel.querySelectorAll(".slide"));
+    const counter = document.querySelector("[data-counter]");
+    const scrubber = document.querySelector("[data-scrubber]");
+    const autoplayDelay = 1000;
+    const slideCount = slides.length || 3;
+    const shift = 100 / slideCount;
+
+    let images = [];
+    let index = 0;
+    let targetIndex = 0;
+    let animating = false;
+    let autoplayId = null;
+    let resumeTimeoutId = null;
+    let transitionTimeoutId = null;
+    const transitionDuration = 420;
+
+    const mod = (value, length) => (value % length + length) % length;
+
+    const setSlide = (img, idx) => {
+      const file = images[idx];
+      img.src = `img/Dugin/${file}`;
+      img.alt = `Dugin: Superhero ${idx + 1}`;
+    };
+
+    const preload = (idx) => {
+      const file = images[mod(idx, images.length)];
+      const img = new Image();
+      img.src = `img/Dugin/${file}`;
+    };
+
+    const updateSlides = () => {
+      setSlide(slides[0], mod(index - 1, images.length));
+      setSlide(slides[1], index);
+      setSlide(slides[2], mod(index + 1, images.length));
+      counter.textContent = `${index + 1} / ${images.length}`;
+      scrubber.value = index + 1;
+      preload(index + 2);
+      preload(index - 2);
+    };
+
+    const move = (direction) => {
+      if (animating || images.length === 0) {
+        return;
+      }
+
+      animating = true;
+      targetIndex = mod(index + (direction === "next" ? 1 : -1), images.length);
+      track.style.transition = `transform ${transitionDuration}ms ease`;
+      track.style.transform = direction === "next"
+        ? `translateX(-${shift * 2}%)`
+        : "translateX(0%)";
+      if (transitionTimeoutId) {
+        clearTimeout(transitionTimeoutId);
+      }
+      transitionTimeoutId = setTimeout(settleTransition, transitionDuration + 80);
+    };
+
+    const startAutoplay = () => {
+      if (autoplayId) {
+        clearInterval(autoplayId);
+      }
+      autoplayId = setInterval(() => move("next"), autoplayDelay);
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayId) {
+        clearInterval(autoplayId);
+        autoplayId = null;
+      }
+    };
+
+    const scheduleResume = (delay) => {
+      if (resumeTimeoutId) {
+        clearTimeout(resumeTimeoutId);
+      }
+      resumeTimeoutId = setTimeout(() => {
+        resumeTimeoutId = null;
+        startAutoplay();
+      }, delay);
+    };
+
+    const settleTransition = () => {
+      if (!animating) {
+        return;
+      }
+      index = targetIndex;
+      track.style.transition = "none";
+      updateSlides();
+      track.style.transform = `translateX(-${shift}%)`;
+      requestAnimationFrame(() => {
+        animating = false;
+      });
+    };
+
+    track.addEventListener("transitionend", (event) => {
+      if (event.propertyName !== "transform") {
+        return;
+      }
+      if (transitionTimeoutId) {
+        clearTimeout(transitionTimeoutId);
+        transitionTimeoutId = null;
+      }
+      settleTransition();
+    });
+
+    scrubber.addEventListener("input", () => {
+      if (!images.length) {
+        return;
+      }
+      stopAutoplay();
+      scheduleResume(3000);
+      index = mod(Number(scrubber.value) - 1, images.length);
+      track.style.transition = "none";
+      updateSlides();
+      track.style.transform = `translateX(-${shift}%)`;
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        move("prev");
+      }
+      if (event.key === "ArrowRight") {
+        move("next");
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        stopAutoplay();
+      } else if (images.length) {
+        startAutoplay();
+      }
+    });
+
+    track.style.setProperty("--slide-count", slideCount);
+    track.style.transform = `translateX(-${shift}%)`;
+
+    fetch("img/dugin-images.json")
+      .then((response) => response.json())
+      .then((files) => {
+        images = files;
+        if (images.length === 0) {
+          counter.textContent = "No images found.";
+          return;
+        }
+        scrubber.max = images.length;
+        scrubber.value = 1;
+        updateSlides();
+        startAutoplay();
+      })
+      .catch(() => {
+        counter.textContent = "Unable to load images.";
+      });
+  </script>
+</body>
+</html>
