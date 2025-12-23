@@ -8,110 +8,23 @@
   aria-label="Van Acker Art Gallery logo"
 >
   <defs>
-    <linearGradient id="grad-default" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#d7e7f4" />
-      <stop offset="60%" stop-color="#2d7fc4" />
+    <linearGradient id="grad-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7cc4ff" />
       <stop offset="100%" stop-color="#0b4f87" />
     </linearGradient>
-    <linearGradient id="grad-mid" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#cfe3f4" />
-      <stop offset="65%" stop-color="#4a97d6" />
-      <stop offset="100%" stop-color="#1f6aa6" />
-    </linearGradient>
-    <linearGradient id="grad-light" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#e8f4ff" />
-      <stop offset="70%" stop-color="#7cc4ff" />
-      <stop offset="100%" stop-color="#48a4f2" />
-    </linearGradient>
-    <clipPath id="cell-r1c1">
-      <rect x="80" y="25" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r1c2">
-      <rect x="168" y="25" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r1c3">
-      <rect x="256" y="25" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r1c4">
-      <rect x="344" y="25" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r2c1">
-      <rect x="80" y="91" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r2c2">
-      <rect x="168" y="91" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r2c3">
-      <rect x="256" y="91" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r2c4">
-      <rect x="344" y="91" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r3c1">
-      <rect x="80" y="157" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r3c2">
-      <rect x="168" y="157" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r3c3">
-      <rect x="256" y="157" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r3c4">
-      <rect x="344" y="157" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r4c2">
-      <rect x="168" y="223" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r4c4">
-      <rect x="344" y="223" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r5c2">
-      <rect x="168" y="289" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r5c4">
-      <rect x="344" y="289" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r6c4">
-      <rect x="344" y="355" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
-    <clipPath id="cell-r7c4">
-      <rect x="344" y="421" width="88" height="66" rx="6" ry="6" />
-    </clipPath>
   </defs>
   <rect width="512" height="512" fill="#ffffff" />
-  <g
+  <text
+    x="256"
+    y="330"
     font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
-    font-weight="900"
-    font-size="140"
+    font-weight="700"
+    font-size="860"
     text-anchor="middle"
     dominant-baseline="middle"
-    paint-order="stroke fill"
-    stroke="#1f6aa6"
-    stroke-width="18"
-    stroke-linejoin="round"
+    fill="url(#grad-blue)"
+    transform="translate(256 256) scale(1 -1) translate(-256 -256)"
   >
-    <text x="124" y="58" fill="url(#grad-mid)" clip-path="url(#cell-r1c1)">V</text>
-    <text x="212" y="58" fill="url(#grad-mid)" clip-path="url(#cell-r1c2)">A</text>
-    <text x="300" y="58" fill="url(#grad-mid)" clip-path="url(#cell-r1c3)">A</text>
-    <text x="388" y="58" fill="url(#grad-mid)" clip-path="url(#cell-r1c4)">G</text>
-
-    <text x="124" y="124" fill="url(#grad-light)" clip-path="url(#cell-r2c1)">a</text>
-    <text x="212" y="124" fill="url(#grad-default)" clip-path="url(#cell-r2c2)">c</text>
-    <text x="300" y="124" fill="url(#grad-default)" clip-path="url(#cell-r2c3)">r</text>
-    <text x="388" y="124" fill="url(#grad-light)" clip-path="url(#cell-r2c4)">a</text>
-
-    <text x="124" y="190" fill="url(#grad-light)" clip-path="url(#cell-r3c1)">n</text>
-    <text x="212" y="190" fill="url(#grad-default)" clip-path="url(#cell-r3c2)">k</text>
-    <text x="300" y="190" fill="url(#grad-default)" clip-path="url(#cell-r3c3)">t</text>
-    <text x="388" y="190" fill="url(#grad-light)" clip-path="url(#cell-r3c4)">l</text>
-
-    <text x="212" y="256" fill="url(#grad-default)" clip-path="url(#cell-r4c2)">e</text>
-    <text x="388" y="256" fill="url(#grad-light)" clip-path="url(#cell-r4c4)">l</text>
-
-    <text x="212" y="322" fill="url(#grad-light)" clip-path="url(#cell-r5c2)">r</text>
-    <text x="388" y="322" fill="url(#grad-light)" clip-path="url(#cell-r5c4)">e</text>
-
-    <text x="388" y="388" fill="url(#grad-light)" clip-path="url(#cell-r6c4)">r</text>
-    <text x="388" y="454" fill="url(#grad-light)" clip-path="url(#cell-r7c4)">y</text>
-  </g>
+    A
+  </text>
 </svg>
