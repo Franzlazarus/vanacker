@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upcoming Events — Van Acker Art Gallery</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #111;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      width: min(980px, 100%);
+      padding: 72px 64px 96px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: clamp(2.6rem, 7vw, 4.6rem);
+      letter-spacing: -0.01em;
+    }
+
+    .intro {
+      margin: 0 auto 48px;
+      max-width: 52ch;
+      font-size: clamp(1rem, 2.6vw, 1.4rem);
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 48px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #111;
+      padding-bottom: 4px;
+    }
+
+    .back-link:focus-visible {
+      outline: 2px solid #111;
+      outline-offset: 6px;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 48px 24px 72px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Upcoming Events</h1>
+    <p class="intro">
+      We'll be in New York from the 15th till the 25th of January. They're screening our debut
+      film at BCTR. More info soon.
+    </p>
+    <a class="back-link" href="index.html">Back to home</a>
+  </main>
+</body>
+</html>

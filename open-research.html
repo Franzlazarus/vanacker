@@ -62,6 +62,10 @@
       outline-offset: 6px;
     }
 
+    [data-status="draft"] {
+      display: none;
+    }
+
     .gallery-section {
       scroll-margin-top: 40px;
     }
@@ -154,14 +158,15 @@
   <main>
     <h1>Open Research</h1>
     <p class="intro">
-      This is research for out art, it is a backdrop. A view into our minds.
+      This is research for our art, it is a backdrop.<br>
+      A view into our minds.
     </p>
 
     <div class="project-list">
-      <a class="project-link" href="#dugin-superhero">Dugin: Superhero</a>
+      <a class="project-link" href="#dugin-superhero" data-status="draft">Dugin: Superhero</a>
     </div>
 
-    <section id="dugin-superhero" class="gallery-section">
+    <section id="dugin-superhero" class="gallery-section" data-status="draft">
       <h2 class="project-title">Dugin: Superhero</h2>
       <div class="carousel" aria-live="polite">
         <div class="viewport">
@@ -181,161 +186,168 @@
     <a class="back-link" href="index.html">Back to home</a>
   </main>
   <script>
-    const carousel = document.querySelector(".carousel");
-    const track = carousel.querySelector(".track");
-    const slides = Array.from(carousel.querySelectorAll(".slide"));
-    const counter = document.querySelector("[data-counter]");
-    const scrubber = document.querySelector("[data-scrubber]");
-    const autoplayDelay = 1000;
-    const slideCount = slides.length || 3;
-    const shift = 100 / slideCount;
-
-    let images = [];
-    let index = 0;
-    let targetIndex = 0;
-    let animating = false;
-    let autoplayId = null;
-    let resumeTimeoutId = null;
-    let transitionTimeoutId = null;
-    const transitionDuration = 420;
-
-    const mod = (value, length) => (value % length + length) % length;
-
-    const setSlide = (img, idx) => {
-      const file = images[idx];
-      img.src = `img/Dugin/${file}`;
-      img.alt = `Dugin: Superhero ${idx + 1}`;
-    };
-
-    const preload = (idx) => {
-      const file = images[mod(idx, images.length)];
-      const img = new Image();
-      img.src = `img/Dugin/${file}`;
-    };
-
-    const updateSlides = () => {
-      setSlide(slides[0], mod(index - 1, images.length));
-      setSlide(slides[1], index);
-      setSlide(slides[2], mod(index + 1, images.length));
-      counter.textContent = `${index + 1} / ${images.length}`;
-      scrubber.value = index + 1;
-      preload(index + 2);
-      preload(index - 2);
-    };
-
-    const move = (direction) => {
-      if (animating || images.length === 0) {
+    (() => {
+      const duginSection = document.querySelector("#dugin-superhero");
+      if (!duginSection || duginSection.dataset.status === "draft") {
         return;
       }
 
-      animating = true;
-      targetIndex = mod(index + (direction === "next" ? 1 : -1), images.length);
-      track.style.transition = `transform ${transitionDuration}ms ease`;
-      track.style.transform = direction === "next"
-        ? `translateX(-${shift * 2}%)`
-        : "translateX(0%)";
-      if (transitionTimeoutId) {
-        clearTimeout(transitionTimeoutId);
-      }
-      transitionTimeoutId = setTimeout(settleTransition, transitionDuration + 80);
-    };
+      const carousel = duginSection.querySelector(".carousel");
+      const track = carousel.querySelector(".track");
+      const slides = Array.from(carousel.querySelectorAll(".slide"));
+      const counter = duginSection.querySelector("[data-counter]");
+      const scrubber = duginSection.querySelector("[data-scrubber]");
+      const autoplayDelay = 1000;
+      const slideCount = slides.length || 3;
+      const shift = 100 / slideCount;
 
-    const startAutoplay = () => {
-      if (autoplayId) {
-        clearInterval(autoplayId);
-      }
-      autoplayId = setInterval(() => move("next"), autoplayDelay);
-    };
+      let images = [];
+      let index = 0;
+      let targetIndex = 0;
+      let animating = false;
+      let autoplayId = null;
+      let resumeTimeoutId = null;
+      let transitionTimeoutId = null;
+      const transitionDuration = 420;
 
-    const stopAutoplay = () => {
-      if (autoplayId) {
-        clearInterval(autoplayId);
-        autoplayId = null;
-      }
-    };
+      const mod = (value, length) => (value % length + length) % length;
 
-    const scheduleResume = (delay) => {
-      if (resumeTimeoutId) {
-        clearTimeout(resumeTimeoutId);
-      }
-      resumeTimeoutId = setTimeout(() => {
-        resumeTimeoutId = null;
-        startAutoplay();
-      }, delay);
-    };
+      const setSlide = (img, idx) => {
+        const file = images[idx];
+        img.src = `img/Dugin/${file}`;
+        img.alt = `Dugin: Superhero ${idx + 1}`;
+      };
 
-    const settleTransition = () => {
-      if (!animating) {
-        return;
-      }
-      index = targetIndex;
-      track.style.transition = "none";
-      updateSlides();
-      track.style.transform = `translateX(-${shift}%)`;
-      requestAnimationFrame(() => {
-        animating = false;
-      });
-    };
+      const preload = (idx) => {
+        const file = images[mod(idx, images.length)];
+        const img = new Image();
+        img.src = `img/Dugin/${file}`;
+      };
 
-    track.addEventListener("transitionend", (event) => {
-      if (event.propertyName !== "transform") {
-        return;
-      }
-      if (transitionTimeoutId) {
-        clearTimeout(transitionTimeoutId);
-        transitionTimeoutId = null;
-      }
-      settleTransition();
-    });
+      const updateSlides = () => {
+        setSlide(slides[0], mod(index - 1, images.length));
+        setSlide(slides[1], index);
+        setSlide(slides[2], mod(index + 1, images.length));
+        counter.textContent = `${index + 1} / ${images.length}`;
+        scrubber.value = index + 1;
+        preload(index + 2);
+        preload(index - 2);
+      };
 
-    scrubber.addEventListener("input", () => {
-      if (!images.length) {
-        return;
-      }
-      stopAutoplay();
-      scheduleResume(3000);
-      index = mod(Number(scrubber.value) - 1, images.length);
-      track.style.transition = "none";
-      updateSlides();
-      track.style.transform = `translateX(-${shift}%)`;
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowLeft") {
-        move("prev");
-      }
-      if (event.key === "ArrowRight") {
-        move("next");
-      }
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        stopAutoplay();
-      } else if (images.length) {
-        startAutoplay();
-      }
-    });
-
-    track.style.setProperty("--slide-count", slideCount);
-    track.style.transform = `translateX(-${shift}%)`;
-
-    fetch("img/dugin-images.json")
-      .then((response) => response.json())
-      .then((files) => {
-        images = files;
-        if (images.length === 0) {
-          counter.textContent = "No images found.";
+      const move = (direction) => {
+        if (animating || images.length === 0) {
           return;
         }
-        scrubber.max = images.length;
-        scrubber.value = 1;
+
+        animating = true;
+        targetIndex = mod(index + (direction === "next" ? 1 : -1), images.length);
+        track.style.transition = `transform ${transitionDuration}ms ease`;
+        track.style.transform = direction === "next"
+          ? `translateX(-${shift * 2}%)`
+          : "translateX(0%)";
+        if (transitionTimeoutId) {
+          clearTimeout(transitionTimeoutId);
+        }
+        transitionTimeoutId = setTimeout(settleTransition, transitionDuration + 80);
+      };
+
+      const startAutoplay = () => {
+        if (autoplayId) {
+          clearInterval(autoplayId);
+        }
+        autoplayId = setInterval(() => move("next"), autoplayDelay);
+      };
+
+      const stopAutoplay = () => {
+        if (autoplayId) {
+          clearInterval(autoplayId);
+          autoplayId = null;
+        }
+      };
+
+      const scheduleResume = (delay) => {
+        if (resumeTimeoutId) {
+          clearTimeout(resumeTimeoutId);
+        }
+        resumeTimeoutId = setTimeout(() => {
+          resumeTimeoutId = null;
+          startAutoplay();
+        }, delay);
+      };
+
+      const settleTransition = () => {
+        if (!animating) {
+          return;
+        }
+        index = targetIndex;
+        track.style.transition = "none";
         updateSlides();
-        startAutoplay();
-      })
-      .catch(() => {
-        counter.textContent = "Unable to load images.";
+        track.style.transform = `translateX(-${shift}%)`;
+        requestAnimationFrame(() => {
+          animating = false;
+        });
+      };
+
+      track.addEventListener("transitionend", (event) => {
+        if (event.propertyName !== "transform") {
+          return;
+        }
+        if (transitionTimeoutId) {
+          clearTimeout(transitionTimeoutId);
+          transitionTimeoutId = null;
+        }
+        settleTransition();
       });
+
+      scrubber.addEventListener("input", () => {
+        if (!images.length) {
+          return;
+        }
+        stopAutoplay();
+        scheduleResume(3000);
+        index = mod(Number(scrubber.value) - 1, images.length);
+        track.style.transition = "none";
+        updateSlides();
+        track.style.transform = `translateX(-${shift}%)`;
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") {
+          move("prev");
+        }
+        if (event.key === "ArrowRight") {
+          move("next");
+        }
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          stopAutoplay();
+        } else if (images.length) {
+          startAutoplay();
+        }
+      });
+
+      track.style.setProperty("--slide-count", slideCount);
+      track.style.transform = `translateX(-${shift}%)`;
+
+      fetch("img/dugin-images.json")
+        .then((response) => response.json())
+        .then((files) => {
+          images = files;
+          if (images.length === 0) {
+            counter.textContent = "No images found.";
+            return;
+          }
+          scrubber.max = images.length;
+          scrubber.value = 1;
+          updateSlides();
+          startAutoplay();
+        })
+        .catch(() => {
+          counter.textContent = "Unable to load images.";
+        });
+    })();
   </script>
 </body>
 </html>
