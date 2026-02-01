@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Van Acker Art gallery</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -70,12 +73,103 @@
       --grad: linear-gradient(180deg, #cfe3f4 0%, #4a97d6 65%, #1f6aa6 100%);
     }
 
+    .logo-stack {
+      display: grid;
+      gap: clamp(10px, 2.5vw, 18px);
+      justify-items: center;
+      text-align: center;
+      font-family: "Cormorant Garamond", "Baskerville", "Garamond", "Times New Roman", serif;
+      color: #111;
+    }
+
+    .logo-main {
+      font-size: clamp(3.2rem, 10vw, 6.4rem);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 0.95;
+    }
+
+    .logo-sub {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: clamp(16px, 3vw, 30px);
+      line-height: 0.9;
+    }
+
+    .logo-article {
+      font-size: clamp(2.1rem, 6vw, 4.3rem);
+      font-weight: 500;
+    }
+
+    .logo-noun {
+      font-size: clamp(3.4rem, 11vw, 7.6rem);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
     .description {
-      margin: 52px 0 0;
+      margin: 96px 0 0;
       max-width: 48ch;
       font-size: clamp(1rem, 3vw, 1.5rem);
       line-height: 1.45;
       font-weight: 700;
+      text-align: center;
+    }
+
+    .substack-embed {
+      width: min(86vw, 960px);
+      margin: 96px 0 0;
+    }
+
+    .substack-video-card {
+      position: relative;
+      display: block;
+      aspect-ratio: 16 / 9;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+      background: #0b0b0b;
+    }
+
+    .substack-video-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.95);
+    }
+
+    .substack-video-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.55) 100%);
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .substack-video-card:hover::after,
+    .substack-video-card:focus-visible::after {
+      opacity: 1;
+    }
+
+    .substack-video-card:focus-visible {
+      outline: 3px solid #111;
+      outline-offset: 6px;
+    }
+
+    .substack-callout {
+      margin: 22px 0 0;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      font-weight: 700;
+    }
+
+    .substack-callout a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 2px solid #111;
+      padding-bottom: 4px;
     }
 
     .research-link {
@@ -155,6 +249,7 @@
 <body>
   <main>
     <div class="intro-block">
+      <!--
       <div class="title-grid" aria-label="Van Acker Art Gallery">
         <span class="letter tone-mid" style="grid-column: 1; grid-row: 1;">V</span>
         <span class="letter tone-mid" style="grid-column: 2; grid-row: 1;">A</span>
@@ -180,10 +275,28 @@
         <span class="letter tone-light" style="grid-column: 4; grid-row: 6;">r</span>
         <span class="letter tone-light descender" style="grid-column: 4; grid-row: 7;">y</span>
       </div>
+      -->
+      <div class="logo-stack" aria-label="Van Acker Art Gallery">
+        <div class="logo-main">Van Acker</div>
+        <div class="logo-sub">
+          <span class="logo-article">Art</span>
+          <span class="logo-noun">Gallery</span>
+        </div>
+      </div>
+      <!--
       <p class="description">
         An art project by <br>
         Sebastiaan Verbeeten and Brant Peije Teunis,<br>
         producing movies and music.
+      </p>
+      -->
+      <div class="substack-embed" aria-label="Love of the Game video from Substack">
+        <a class="substack-video-card" href="https://open.substack.com/pub/vanackerartgallery/p/love-of-the-game?utm_campaign=post-expanded-share&utm_medium=web" target="_blank" rel="noopener">
+          <img src="img/loveofthegamesnake.png" alt="Love of the Game video poster" loading="lazy" />
+        </a>
+      </div>
+      <p class="substack-callout">
+        <a href="https://vanackerartgallery.substack.com">Watch our work on Substack</a>
       </p>
     </div>
     <div class="spacer" aria-hidden="true"></div>
@@ -196,7 +309,7 @@
       <a href="mailto:info@vanacker.art">info@vanacker.art</a>
       <br>
       Support us:
-      <a href="https://www.patreon.com/VanAckerArtGallery">patreon.com/VanAckerArtGallery</a>
+      <a href="https://vanackerartgallery.substack.com/subscribe?next=https://substack.com/@vanackerartgallery?utm_source%3Dglobal-search&just_signed_up=true">vanackerartgallery.substack.com</a>
     </p>
   </main>
 </body>
